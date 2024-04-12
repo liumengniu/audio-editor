@@ -5,7 +5,16 @@ import {PageContainer, ProLayout} from '@ant-design/pro-components';
 import logo from "./logo.png"
 import WavesurferPlayer, {useWavesurfer} from '@wavesurfer/react'
 import {Button, Col, Row, Space, Upload} from "antd";
-import {SearchOutlined,UploadOutlined} from "@ant-design/icons"
+import {
+	SearchOutlined,
+	UploadOutlined,
+	PlayCircleOutlined,
+	StopOutlined,
+	PauseCircleOutlined,
+	CloseCircleOutlined,
+	SaveOutlined,
+	ExportOutlined
+} from "@ant-design/icons"
 import { useMemo, useRef } from "react";
 import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.esm.js'
 import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.esm.js'
@@ -77,9 +86,6 @@ function App() {
 		plugins: useMemo(() => [topTimeline, wsRegions],[])
 	})
 	
-	const onPlayPause = () => {
-		wavesurfer && wavesurfer.playPause()
-	}
 	/**
 	 * 导入音频 blob 对象，绘制波形图
 	 */
@@ -123,6 +129,31 @@ function App() {
 		const file = $event?.file;
 		drawWave(file);
 	}
+	/**
+	 * 关闭
+	 */
+	
+	/**
+	 * 保存
+	 */
+	
+	
+	/**
+	 * 播放/暂停
+	 */
+	const onPlayPause = () => {
+		wavesurfer && wavesurfer.playPause()
+	}
+	/**
+	 * 停止
+	 */
+	const onPlayStop = () =>{
+		wavesurfer && wavesurfer.stop();
+	}
+	/**
+	 * 裁剪
+	 */
+	const handleCrop = () =>{}
 	
 	return (
 		<div className="App">
@@ -138,19 +169,46 @@ function App() {
 				}}
 				menu={{request: async () => loopMenuItem(defaultMenus)}}
 			>
-				<PageContainer content="欢迎使用">
+				<PageContainer content="简易编辑">
 					<div style={{height: '120vh', minHeight: 600,}}>
 						
 						<Space>
+							文件：
 							<Upload customRequest={customRequest} fileList={[]}>
 								<Button icon={<UploadOutlined />}>打开音频</Button>
 							</Upload>
+							<Button icon={<CloseCircleOutlined />}>关闭音频</Button>
+							<Button icon={<SaveOutlined />}>保存音频</Button>
+							<Button icon={<ExportOutlined />} type="primary">导出</Button>
+						</Space>
+						<Space style={{marginTop: 10, width: "100%"}}>
+							剪辑：
+							<Space>
+								<Button>剪切</Button>
+								<Button onClick={handleCrop}>裁剪</Button>
+								<Button>拷贝</Button>
+								<Button>粘贴</Button>
+								<Button>删除</Button>
+							</Space>
+							<Space>
+								<Button>插入停顿</Button>
+								<Button>拼接音频</Button>
+								<Button>合并音频</Button>
+							</Space>
+							
 						</Space>
 						
 						<div id="wavesurfer-container" ref={containerRef} />
-						<button onClick={onPlayPause}>
-							{isPlaying ? 'Pause' : 'Play'}
-						</button>
+						<Space>
+							{
+								isPlaying ? <Button icon={<PauseCircleOutlined />} onClick={onPlayPause}>暂停</Button> :
+									<Button icon={<PlayCircleOutlined/>} onClick={onPlayPause}>播放</Button>
+							}
+							<Button icon={<StopOutlined />} onClick={onPlayStop}>停止</Button>
+						</Space>
+						<Space>
+						
+						</Space>
 					</div>
 				</PageContainer>
 			</ProLayout>
