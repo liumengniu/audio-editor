@@ -84,10 +84,19 @@ function App() {
 	 * 导入音频 blob 对象，绘制波形图
 	 */
 	const drawWave = file =>{
-		console.log(wavesurfer, '----wavesurfer', file)
 		wavesurfer?.loadBlob(file)
+		/**
+		 * wavesurfer回调事件
+		 */
+		wavesurfer.on('interaction', (newTime) => {
+			console.log('Interaction', newTime + 's')
+		})
 		// 启动region拖动事件
 		enableDragSelection();
+		
+		wavesurfer.on('drag', (relativeX) => {
+			console.log('drag', relativeX)
+		})
 	}
 	
 	/**
@@ -96,6 +105,14 @@ function App() {
 	const enableDragSelection = () =>{
 		wsRegions.enableDragSelection({
 			color: 'rgba(255, 255, 255, 0.3)',
+		})
+		
+		wsRegions.on('region-created', (region) => {
+		
+		})
+		
+		wsRegions.on('region-updated', (region) => {
+			console.log('Updated region', region)
 		})
 	}
 	/**
