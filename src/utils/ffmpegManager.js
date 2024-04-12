@@ -36,7 +36,7 @@ const ffmpegManager = {
 		return null
 	},
 	/**
-	 * 裁剪音频
+	 * 裁剪音频(node.js运行环境)
 	 * @param file
 	 * @param position
 	 * @param startTime
@@ -44,6 +44,34 @@ const ffmpegManager = {
 	 * @returns {Promise<unknown>}
 	 */
 	clipAudio: function (file, position, startTime, duration) {
+		let outputOptions = []
+		if (duration) { // 如果持续时间参数不存在，则从开始时间一直裁剪到音频结束
+			outputOptions.push(`-t ${duration}`)
+		}
+		outputOptions.push('-acodec copy')
+		outputOptions.push('-vn')
+		return new Promise((resolve, reject) => {
+			ffmpeg().input(file).inputOptions([`-ss ${startTime}`]).outputOptions(outputOptions).save(path.join(remote.app.getPath('temp'), `/${position}.mp3`))
+				.on('error', function (err) {
+					console.log('error: ' + err, position)
+					reject(err)
+				}).on('end', function (err, response) {
+				if (!err) {
+					resolve(response)
+				} else {
+					reject(err)
+				}
+			})
+		})
+	},
+	/**
+	 * 裁剪视频（浏览器环境）
+	 * @param file
+	 * @param position
+	 * @param startTime
+	 * @param duration
+	 */
+	clipAudioWeb: function (file, position, startTime, duration) {
 		let outputOptions = []
 		if (duration) { // 如果持续时间参数不存在，则从开始时间一直裁剪到音频结束
 			outputOptions.push(`-t ${duration}`)
