@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# <p align="center">基于web开发的可拖拽问卷生成器</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[//]: # (https://github.com/ikatyang/emoji-cheat-sheet 表情仓库)
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `npm start`
+## 🎞️ 项目介绍
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+> 使用react开发，UI库使用antd。[项目地址](https://github.com/liumengniu/audio-editor). \
+> 最终生成的问卷的schema数据为json串，可以直接存储至服务端。 \
+> web端拿到schema数据，可以生成在线web问卷（实现中）。 \
+> 代码基本是纯JS代码实现，除了UI库。 \
+> 以下是项目原始示例，未经任何修改：
+> ![image](./demo.gif)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+## 🎨 运行指南
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> 项目运行需要node环境 ，推荐node14+，作者使用的是node 16.13.1
 
-### `npm run build`
+> 1. 安装依赖
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+   npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+> 2. 运行项目
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+   npm run start
+```
 
-### `npm run eject`
+> 3. 编译项目
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+   npm run build
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 💡 优化清单
+> 需要优化的内容 2024/4/10
+>
+| 蓝图                       | 完成情况       | 存在问题        |
+|--------------------------|------------|-------------|
+| 1、增加更多的基础组件        | pending    | 常规的组件就这些，有哪些特殊问卷组件没有，可以提iuuse  |
+| 2、增加更多操作项           | pending   |             |
+| 3、增加更多的配置           | pending | 配置过少 |
+| 4、增加不同的主题和皮肤      | pending | ui只有一套固定版式 |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🌟 Star History
+<br>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+[![Star History Chart](https://api.star-history.com/svg?repos=liumengniu/questionnaire-generator&type=Timeline)](https://star-history.com/#liumengniu/questionnaire-generator&Timeline)
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
