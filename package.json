@@ -12,10 +12,7 @@
     "@wavesurfer/react": "^1.0.5",
     "antd": "^5.16.1",
     "craco-less": "^3.0.1",
-    "ffmpeg-static": "^5.2.0",
     "ffmpeg.js": "^4.2.9003",
-    "ffprobe-static": "^3.1.0",
-    "fluent-ffmpeg": "^2.1.2",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -52,6 +49,8 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
     "terser-webpack-plugin": "^5.3.10"
   }
 }
