@@ -19,7 +19,8 @@
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
     "wavesurfer.js": "^7.7.10",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "worker-loader": "^3.0.8"
   },
   "scripts": {
     "start": "cross-env REACT_APP_ENVIRONMENT=development craco start",

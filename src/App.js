@@ -15,11 +15,10 @@ import {
 	SaveOutlined,
 	ExportOutlined
 } from "@ant-design/icons"
-import { useMemo, useRef } from "react";
+import {useMemo, useRef, useState} from "react";
 import TimelinePlugin from 'wavesurfer.js/dist/plugins/timeline.esm.js'
 import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.esm.js'
-import ffmpegPath from "ffmpeg-static";
-console.log(ffmpegPath, 'ffmpegPathffmpegPathffmpegPathffmpegPathffmpegPathffmpegPathffmpegPath')
+import ffmpegUtils from "@utils/ffmpegUtil";
 
 
 const IconMap = {
@@ -76,6 +75,7 @@ const wsRegions = RegionsPlugin.create({
 
 function App() {
 	const containerRef = useRef(null)
+	const [currentFile, setCurrentFile] = useState(null)
 	
 	const { wavesurfer, isPlaying, currentTime } = useWavesurfer({
 		height: 175,
@@ -129,6 +129,7 @@ function App() {
 	 */
 	const customRequest = $event =>{
 		const file = $event?.file;
+		setCurrentFile(file)
 		drawWave(file);
 	}
 	/**
@@ -155,7 +156,13 @@ function App() {
 	/**
 	 * 裁剪
 	 */
-	const handleCrop = () =>{}
+	const handleCrop = async () =>{
+		const regionList = wsRegions.getRegions();
+		const region = regionList[0];
+		let startTime = region.start, endTime = region.end;
+		let newFile = await ffmpegUtils.clip(currentFile, startTime, endTime);
+		drawWave(newFile)
+	}
 	
 	return (
 		<div className="App">
