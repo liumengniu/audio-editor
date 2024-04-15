@@ -4,6 +4,9 @@
  * @Date: 2024-4-14
  */
 import _ from "lodash"
+// const ffmpeg = require("ffmpeg.js");
+// const fs = require("fs");
+
 
 const ffmpegUtils = {
 	worker: null,
@@ -60,7 +63,7 @@ const ffmpegUtils = {
 		return new Promise((resolve, reject) => {
 			// 成功回调
 			const successHandler = function(event) {
-				console.log(event, 5555555555555555555555555555)
+				// console.log(event, 5555555555555555555555555555)
 				switch (event.data.type) {
 					case "stdout":
 						console.log("worker stdout: ", event.data.data);
@@ -72,6 +75,7 @@ const ffmpegUtils = {
 					
 					case "done":
 						worker.removeEventListener("message", successHandler);
+						console.log(event, '999999999999999eventeventevent9999999999999')
 						resolve(event);
 						break;
 					case 'error':
@@ -115,21 +119,37 @@ const ffmpegUtils = {
 		};
 	},
 	/**
+	 * 合并音频command
+	 * @returns {{arguments: string[], type: string, MEMFS: [{data: Uint8Array, name: string}]}}
+	 */
+	getMergeCommand: function (firstBuf, lastBuf){
+		return {
+			type: "run",
+			arguments: ['-i', 'input1.mp3', '-i', 'input2.mp3','-acodec', 'copy', 'output.mp3'],
+			MEMFS: [
+				{
+					data: new Uint8Array(firstBuf),
+					name: "input1.mp3"
+				},
+				{
+					data: new Uint8Array(lastBuf),
+					name: "input2.mp3"
+				}
+			]
+		}
+	},
+	/**
 	 * 将传入的一段音频blob，按照指定的时间位置进行裁剪
 	 * @param originBlob 待处理的音频
 	 * @param startSecond 开始裁剪时间点（秒）
 	 * @param endSecond 结束裁剪时间点（秒）
+	 * @param dataType 返回的格式  blob 或 arrayBuffer（参数"arraybuffer"）
 	 */
-	clip: async function(originBlob, startSecond, endSecond){
-		console.log(this.worker, 'vvvvvvvvvvvvvvvv',originBlob, startSecond, endSecond)
+	clip: async function(originBlob, startSecond, endSecond, dataType){
 		if(!this.worker){
-			// this.worker = new Worker1();
-			// this.worker = this.createWorker('./ffmpeg/ffmpegmp4.worker.js')
-			// this.worker = this.createWorker("WorkerPathTest")
 			this.worker = this.createWorker("./ffmpeg-worker-mp4.js")
 			console.log(this.worker, 'vvvvvvvvvvvvvvvv')
 		}
-		console.log(11111111111111111111111111111)
 		const ss = startSecond;
 		// 获取需要裁剪的时长，若不传endSecond，则默认裁剪到末尾
 		const d = _.isNumber(endSecond) ? endSecond - startSecond : this.end;
@@ -139,32 +159,43 @@ const ffmpegUtils = {
 		console.log(22222222222,originAb,'[[[',d)
 		// 获取发送给ffmpge-worker的指令，并发送给worker，等待其裁剪完成
 		if (d === this.end) {
-			console.log('---------------------------------');
+			console.log(111111111111111111111111111111111)
 			resultArrBuf = (await this.pmToPromise(
 				this.worker,
 				this.getClipCommand(originAb, ss)
 			)).data.data.MEMFS[0].data;
 		} else {
-			console.log('=========================================');
 			resultArrBuf = (await this.pmToPromise(
 				this.worker,
 				this.getClipCommand(originAb, ss, d)
 			)).data.data.MEMFS[0].data;
-			console.log(resultArrBuf, '***************************');
 		}
-		console.log(3333333333333333333333333333333333333)
 		// 将worker处理过后的arrayBuffer包装成blob，并返回
-		return this.arrayBufferToBlob(resultArrBuf);
+		return dataType === "arraybuffer" ? resultArrBuf : this.arrayBufferToBlob(resultArrBuf)
+
 	},
 	/**
 	 * 音频裁剪替换（类似于JS的splice方法）
 	 */
-	spliceAudio: function () {
+	spliceAudio: function (originBlob, startSecond, endSecond) {
 	
 	},
 	/**
 	 * 音频合成
 	 */
+	mergeAudio: async function (originBlob, startSecond, endSecond) {
+		const firstBuf = await this.clip(originBlob, 0, startSecond, "arraybuffer")
+		const lastBuf = await this.clip(originBlob, endSecond, null, "arraybuffer")
+		console.log(firstBuf?.buffer, '返回的buffer', lastBuf?.buffer)
+		// this.worker = this.createWorker("./ffmpeg-worker-mp4.js")
+		const result = (await this.pmToPromise(
+			this.worker,
+			this.getMergeCommand(firstBuf, lastBuf)
+		));
+		const resultArrBuf = _.get(result, `data.data.MEMFS[0].data`)
+		// console.log(resultArrBuf, '=================resultArrBuf===============', result)
+		return this.arrayBufferToBlob(resultArrBuf);
+	}
 	
 	/**
 	 * 音频转码

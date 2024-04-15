@@ -160,8 +160,10 @@ function App() {
 		const regionList = wsRegions.getRegions();
 		const region = regionList[0];
 		let startTime = region.start, endTime = region.end;
-		let newFile = await ffmpegUtils.clip(currentFile, startTime, endTime);
+		// let newFile = await ffmpegUtils.clip(currentFile, startTime, endTime);
+		let newFile = await ffmpegUtils.mergeAudio(currentFile, startTime, endTime);
 		drawWave(newFile)
+		wsRegions.clearRegions();
 	}
 	
 	return (
