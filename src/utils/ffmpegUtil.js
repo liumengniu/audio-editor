@@ -125,7 +125,7 @@ const ffmpegUtils = {
 	getMergeCommand: function (firstBuf, lastBuf){
 		return {
 			type: "run",
-			arguments: ['-i', 'input1.mp3', '-i', 'input2.mp3','-acodec', 'copy', 'output.mp3'],
+			arguments: ['-i', 'input1.mp3', '-i', 'input2.mp3', '-filter_complex', 'amix=inputs=2:duration=first:dropout_transition=2', 'output.mp3'],
 			MEMFS: [
 				{
 					data: new Uint8Array(firstBuf),
